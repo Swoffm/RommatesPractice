@@ -1,12 +1,32 @@
 ﻿using System;
+using System.Collections.Generic;
+using Roommates.Models;
+using Roommates.Repositories;
 
-namespace Rommates
+namespace Roommates
 {
     class Program
     {
+        /// <summary>
+        ///  This is the address of the database.
+        ///  We define it here as a constant since it will never change.
+        /// </summary>
+        private const string CONNECTION_STRING = @"server=localhost\SQLExpress;database=Roommates;integrated security=true";
+
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            RoomRepository roomRepo = new RoomRepository(CONNECTION_STRING);
+
+            Console.WriteLine("Getting All Rooms:");
+            Console.WriteLine();
+
+            List<Room> allRooms = roomRepo.GetAll();
+
+            foreach (Room room in allRooms)
+            {
+                Console.WriteLine($"{room.Id} {room.Name} {room.MaxOccupancy}");
+            }
+
         }
     }
 }
