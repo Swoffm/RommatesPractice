@@ -86,30 +86,21 @@ namespace Roommates
 
             RoommateRepository roomateRepo = new RoommateRepository(CONNECTION_STRING);
 
-            List <Roommate> roomatesList = roomateRepo.GetAll(roomRepo);
+            List <Roommate> roomatesList = roomateRepo.GetAll();
+            List<Roommate> matesWithRoom = new List<Roommate>();
 
-            foreach(Roommate j in roomatesList)
+            foreach (Roommate mate in roomatesList)
             {
-                Console.WriteLine(j.Firstname);
                
-                    if(j.Room != null)
-                    {
-                        Console.WriteLine(j.Room.Name);
-                    }
-                    else
-                    {
-                        Console.WriteLine("No Room Assigned");
-                    }
-                    
-                
-               
-                
+                Roommate steve = (roomateRepo.GetAllWithRoom(mate.RoomId));
+                Console.WriteLine("---------------------");
+                Console.WriteLine(mate.Firstname);
+                Console.WriteLine(mate.Lastname);
+                Console.WriteLine(steve.Room.Name);
+
             }
 
-
-
-
-
+            
 
 
 

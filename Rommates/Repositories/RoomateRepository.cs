@@ -19,7 +19,7 @@ namespace Rommates.Repositories
 
         //first lets get all rommates from the repo
 
-        public List<Roommate> GetAll(RoomRepository roomRepo)
+        public List<Roommate> GetAll()
         {
             using(SqlConnection conn = Connection)
             {
@@ -60,21 +60,9 @@ namespace Rommates.Repositories
                         //getting value for room id
 
                         int roomId = reader.GetOrdinal("RoomId");
-                        int roomIdValue = reader.GetInt32(rentPortion);
+                        int roomIdValue = reader.GetInt32(roomId);
 
-                        //get the value of room and find the room
-                        List<Room> allRooms = roomRepo.GetAll();
-
-                        Room roomateRoom = null;
-
-                        foreach (Room j in allRooms)
-                        {
-                            if(j.Id == roomIdValue)
-                            {
-                                roomateRoom = j;
-                            }
-                            
-                        }
+                       
 
                         
 
@@ -91,7 +79,7 @@ namespace Rommates.Repositories
                             Lastname = lastNameValue,
                             RentPortion = rentPortionValue,
                             MovedInDate = moveInDateValue,
-                            Room = roomateRoom
+                            RoomId = roomIdValue
                         };
 
                         roommates.Add(roommate);
@@ -213,6 +201,55 @@ namespace Rommates.Repositories
                     cmd.CommandText = @"DELETE FROM roommate WHERE Id = @id";
                     cmd.Parameters.AddWithValue("@id", id);
                     cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        //getting roomates witht the room object!!
+
+        public Roommate GetAllWithRoom(int roomId)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = "SELECT FirstName, LastName, RentPortion, MoveInDate, RoomId, Name, room.Id, Roommate.Id, MaxOccupancy FROM Roommate INNER JOIN Room ON room.Id = @roomId";
+                    cmd.Parameters.AddWithValue("@roomId", roomId);
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                   
+
+                    Roommate mate = null;
+
+                    if(reader.Read())
+                    {
+                        mate = new Roommate
+                        {
+                            Id = reader.GetInt32(reader.GetOrdinal("id")),
+                            Firstname = reader.GetString(reader.GetOrdinal("FirstName")),
+                            Lastname = reader.GetString(reader.GetOrdinal("LastName")),
+                            RentPortion = reader.GetInt32(reader.GetOrdinal("RentPortion")),
+                            MovedInDate = reader.GetDateTime(reader.GetOrdinal("MoveInDate")),
+                            Room = new Room
+                            {
+                                Id = roomId,
+                                Name = reader.GetString(reader.GetOrdinal("Name")),
+                                MaxOccupancy = reader.GetInt32(reader.GetOrdinal("MaxOccupancy"))
+                            }
+
+
+                        };
+
+                
+                    }
+
+                    reader.Close();
+                    
+
+                    return mate;
+
                 }
             }
         }
