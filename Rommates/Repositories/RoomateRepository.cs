@@ -19,7 +19,7 @@ namespace Rommates.Repositories
 
         //first lets get all rommates from the repo
 
-        public List<Roommate> GetAll()
+        public List<Roommate> GetAll(RoomRepository roomRepo)
         {
             using(SqlConnection conn = Connection)
             {
@@ -63,8 +63,20 @@ namespace Rommates.Repositories
                         int roomIdValue = reader.GetInt32(rentPortion);
 
                         //get the value of room and find the room
-                        RoomRepository roomRepo = new RoomRepository(CONNECTION_STRING);
-                        Room roommateRoom = roomRepo.GetById(roomIdValue);
+                        List<Room> allRooms = roomRepo.GetAll();
+
+                        Room roomateRoom = null;
+
+                        foreach (Room j in allRooms)
+                        {
+                            if(j.Id == roomIdValue)
+                            {
+                                roomateRoom = j;
+                            }
+                            
+                        }
+
+                        
 
 
                         //getting value for Move IN Date
@@ -79,7 +91,7 @@ namespace Rommates.Repositories
                             Lastname = lastNameValue,
                             RentPortion = rentPortionValue,
                             MovedInDate = moveInDateValue,
-                            Room = roommateRoom
+                            Room = roomateRoom
                         };
 
                         roommates.Add(roommate);
