@@ -142,6 +142,7 @@ namespace Rommates.Repositories
                     //here is the sql querry text
                     cmd.CommandText = @"Insert INTO Roomate (FirstName, LastName, RentPortion, MoveInDate, RoomId) OUTPUT INSERTED.Id VALUES (@FirstName, @LastName, @RentPortion, @MoveInDate, @RoomId";
 
+                    //must include the @ symbol
                     cmd.Parameters.AddWithValue("@FirstName", roommate.Firstname);
                     cmd.Parameters.AddWithValue("@LastName", roommate.Lastname);
                     cmd.Parameters.AddWithValue("@RentPortion", roommate.RentPortion);
@@ -156,8 +157,38 @@ namespace Rommates.Repositories
 
 
 
+        public void Update(Roommate roommate)
+        {
+
+            //must use sqlconnection
+            using (SqlConnection conn = Connection)
+            {
+                //this opens the connection
+                conn.Open();
+
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    //this is SQL query 
+                    cmd.CommandText = @"UPDATE Roomate
+                                        SET FirstName = @firstName,
+                                        LastName = @lastName,
+                                        RentPortion = @rentPortion,
+                                        MoveInDate = @moveInDate,
+                                        RoomId = @roomId";
+                    //must include the @ symbol
+                    cmd.Parameters.AddWithValue("@FirstName", roommate.Firstname);
+                    cmd.Parameters.AddWithValue("@LastName", roommate.Lastname);
+                    cmd.Parameters.AddWithValue("@RentPortion", roommate.RentPortion);
+                    cmd.Parameters.AddWithValue("@MoveInDate", roommate.MovedInDate);
+                    cmd.Parameters.AddWithValue("@RoomId", roommate.Room.Id);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
 
 
+        //Adding delete method
 
 
 
