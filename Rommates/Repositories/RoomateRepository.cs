@@ -27,7 +27,7 @@ namespace Rommates.Repositories
 
                 using(SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = "SELECT Id, FirstName, LastName, RentPortion, MoveInDate, RoomId";
+                    cmd.CommandText = "SELECT Id, FirstName, LastName, RentPortion, MoveInDate, RoomId FROM Roommate";
 
                     SqlDataReader reader = cmd.ExecuteReader();
 
@@ -190,6 +190,20 @@ namespace Rommates.Repositories
 
         //Adding delete method
 
+        public void Delete(int id)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"DELETE FROM roomate WHERE Id = @id";
+                    cmd.Parameters.AddWithValue("@id", id);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
 
 
 

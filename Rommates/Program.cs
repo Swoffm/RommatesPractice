@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
+using Rommates.Repositories;
 using Roommates.Models;
 using Roommates.Repositories;
 
@@ -77,6 +78,27 @@ namespace Roommates
             {
                 Console.WriteLine($"{room.Id} {room.Name} {room.MaxOccupancy}");
             }
+
+
+            //implementing roomate methods below!!
+
+            Console.WriteLine("------------------------------------------------------------------");
+
+            RoommateRepository roomateRepo = new RoommateRepository(CONNECTION_STRING);
+
+            List <Roommate> roomatesList = roomateRepo.GetAll();
+
+            foreach(Roommate j in roomatesList)
+            {
+                Console.WriteLine(j.Firstname);
+            }
+
+
+
+
+
+
+
 
         }
     }
