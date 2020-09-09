@@ -131,5 +131,28 @@ namespace Rommates.Repositories
             }
         }
 
+        public void Insert(Roommate roommate)
+        {
+            using(SqlConnection conn = Connection)
+            {
+                conn.Open();
+
+                using(SqlCommand cmd = conn.CreateCommand())
+
+                {
+                    //here is the sql querry text
+                    cmd.CommandText = @"Insert INTO "
+                }
+            }
+        }
+
+
+
+
+
+
+
+
+
     }
 }
