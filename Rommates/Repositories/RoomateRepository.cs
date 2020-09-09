@@ -138,10 +138,18 @@ namespace Rommates.Repositories
                 conn.Open();
 
                 using(SqlCommand cmd = conn.CreateCommand())
-
                 {
                     //here is the sql querry text
-                    cmd.CommandText = @"Insert INTO "
+                    cmd.CommandText = @"Insert INTO Roomate (FirstName, LastName, RentPortion, MoveInDate, RoomId) OUTPUT INSERTED.Id VALUES (@FirstName, @LastName, @RentPortion, @MoveInDate, @RoomId";
+
+                    cmd.Parameters.AddWithValue("@FirstName", roommate.Firstname);
+                    cmd.Parameters.AddWithValue("@LastName", roommate.Lastname);
+                    cmd.Parameters.AddWithValue("@RentPortion", roommate.RentPortion);
+                    cmd.Parameters.AddWithValue("@MoveInDate", roommate.MovedInDate);
+                    cmd.Parameters.AddWithValue("@RoomId", roommate.Room.Id);
+
+                    int id = (int)cmd.ExecuteScalar();
+                    roommate.Id = id;
                 }
             }
         }
