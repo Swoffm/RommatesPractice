@@ -198,7 +198,7 @@ namespace Rommates.Repositories
 
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"DELETE FROM roomate WHERE Id = @id";
+                    cmd.CommandText = @"DELETE FROM roommate WHERE Id = @id";
                     cmd.Parameters.AddWithValue("@id", id);
                     cmd.ExecuteNonQuery();
                 }
